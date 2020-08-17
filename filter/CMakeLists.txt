@@ -1,8 +1,9 @@
 project(fx_filter VERSION 1.0)
 
 set(dir_submodules ${CMAKE_CURRENT_LIST_DIR}/../submodules)
-set(dir_rack ${dir_submodules}/rack)
-set(dir_rack++module ${dir_submodules}/rackpp/module)
+set(dir_rack++ ${dir_submodules}/rackpp)
+set(dir_rack ${dir_rack++}/submodules/rack)
+set(dir_rack++module ${dir_rack++}/module)
 set(dir_snd ${dir_submodules}/snd)
 set(dir_front ${CMAKE_CURRENT_LIST_DIR}/../../../front)
 
