@@ -42,7 +42,7 @@ if (FX_OUTPUT_DIR)
 endif()
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
-	OUTPUT_NAME blockhead_saturator_${PLATFORM_DIR}
+	OUTPUT_NAME blockhead_ringmod_${PLATFORM_DIR}
 	SUFFIX ".fx"
     CXX_STANDARD 17
 	C_STANDARD 99
