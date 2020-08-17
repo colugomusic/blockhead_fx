@@ -2,11 +2,11 @@ project(fx_ringmod VERSION 1.0.0)
 
 set(dir_submodules ${CMAKE_CURRENT_LIST_DIR}/../submodules)
 set(dir_rack ${dir_submodules}/rack)
-set(dir_rack++ ${dir_submodules}/rackpp)
+set(dir_rack++module ${dir_submodules}/rackpp/module)
 set(dir_front ${CMAKE_CURRENT_LIST_DIR}/../../../front)
 
-if (NOT TARGET rack++)
-	add_subdirectory(${dir_rack++} rack++)
+if (NOT TARGET rack++module)
+	add_subdirectory(${dir_rack++module} rack++module)
 endif()
 
 list(APPEND HEADERS
@@ -26,11 +26,11 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 	${CMAKE_CURRENT_LIST_DIR}/..
 	${CMAKE_CURRENT_LIST_DIR}/../../dsp/include
 	${dir_rack}/include
-	${dir_rack++}/include
+	${dir_rack++module}/include
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
-	rack++
+	rack++module
 )
 
 if (FX_OUTPUT_DIR)
