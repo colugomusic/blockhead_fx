@@ -12,7 +12,9 @@ Zap::Zap()
 	param_res_ = add_param("Resonance");
 	param_mix_ = add_param("Mix");
 
-	param_mix_->set_size_hint(0.75);
+	param_spread_->set_size_hint(0.75);
+	param_res_->set_size_hint(0.75);
+	param_mix_->set_size_hint(0.5);
 
 
 	param_spread_->begin_notify();
