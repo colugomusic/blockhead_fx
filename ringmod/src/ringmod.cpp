@@ -15,6 +15,8 @@ RingModulator::RingModulator()
 	param_freq_->set_max(16700.0f);
 
 	param_amount_ = add_param("Amount");
+	param_amount_->set_size_hint(0.75f);
+
 	trigger_reset_ = add_trigger("Reset");
 
 	param_freq_->begin_notify();

@@ -116,6 +116,11 @@ Rack_ParamFormatHint rack_param_get_format_hint(void* handle)
 	return ((rack::Param*)(handle))->get_format_hint();
 }
 
+float rack_param_get_size_hint(void* handle)
+{
+	return ((rack::Param*)(handle))->get_size_hint();
+}
+
 float rack_param_get_min(void* handle)
 {
 	return ((rack::Param*)(handle))->get_min();
@@ -156,7 +161,7 @@ char rack_channel_set_output_buffer(void* handle, float* out)
 	return ((rack::Channel*)(handle))->set_output_buffer(out);
 }
 
-const float* rack_channel_get_output_buffer(void* handle)
+float* rack_channel_get_output_buffer(void* handle)
 {
 	return ((rack::Channel*)(handle))->get_output_buffer();
 }

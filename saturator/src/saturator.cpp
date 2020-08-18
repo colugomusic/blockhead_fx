@@ -11,6 +11,7 @@ Saturator::Saturator()
 
 	param_ceiling_ = add_param("Ceiling");
 	param_ceiling_->set(1.0f);
+	param_ceiling_->set_size_hint(0.75f);
 
 	param_drive_->begin_notify();
 	param_ceiling_->begin_notify();

@@ -20,6 +20,7 @@ Filter_2Pole::Filter_2Pole()
 
 	param_res_->name = "Resonance";
 	param_res_->set(0.5f);
+	param_res_->set_size_hint(0.75f);
 
 	param_mode_ = add_param();
 
