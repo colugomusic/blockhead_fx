@@ -8,24 +8,20 @@ using namespace rack;
 Filter_2Pole::Filter_2Pole()
 	: BasicStereoEffect("Filter (2P)")
 {
-	param_freq_ = add_param();
+	param_freq_ = add_param("Frequency");
 
-	param_freq_->name = "Frequency";
 	param_freq_->set(600.0f);
 	param_freq_->set_format_hint(Rack_ParamFormatHint_Hertz);
 	param_freq_->set_min(0.08f);
 	param_freq_->set_max(16700.0f);
 
-	param_res_ = add_param();
+	param_res_ = add_param("Resonance");
 
-	param_res_->name = "Resonance";
 	param_res_->set(0.5f);
 	param_res_->set_size_hint(0.75f);
 
-	param_mode_ = add_param();
+	param_mode_ = add_switch_param({ "LP", "BP", "HP" }, "Mode");
 
-	param_mode_->name = "Mode";
-	param_mode_->set_format_hint(Rack_ParamFormatHint_Switch);
 	param_mode_->set_min(0);
 	param_mode_->set_max(2);
 

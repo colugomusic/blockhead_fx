@@ -131,6 +131,11 @@ float rack_param_get_max(void* handle)
 	return ((rack::Param*)(handle))->get_max();
 }
 
+const char* rack_param_get_switch_option_name(void* handle, int id)
+{
+	return ((rack::Param*)(handle))->get_switch_options()[id].c_str();
+}
+
 const char* rack_channel_get_name(void* handle)
 {
 	return ((rack::Channel*)(handle))->name.c_str();

@@ -8,17 +8,14 @@ using namespace rack;
 Filter_1Pole::Filter_1Pole()
 	: BasicStereoEffect("Filter (1P)")
 {
-	param_freq_ = add_param();
+	param_freq_ = add_param("Frequency");
 
-	param_freq_->name = "Frequency";
 	param_freq_->set(600.0f);
 	param_freq_->set_min(0.08f);
 	param_freq_->set_max(16700.0f);
 
-	param_mode_ = add_param();
+	param_mode_ = add_switch_param({ "LP", "HP" }, "Mode");
 
-	param_mode_->name = "Mode";
-	param_mode_->set_format_hint(Rack_ParamFormatHint_Switch);
 	param_mode_->set_min(0);
 	param_mode_->set_max(1);
 

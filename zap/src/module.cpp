@@ -4,7 +4,7 @@
 #include <rack++/module/param.h>
 #include <rack++/module/trigger.h>
 #include <rack++/module/unit.h>
-#include "ringmod.h"
+#include "zap.h"
 
 const char* rack_get_api_version()
 {
@@ -18,7 +18,7 @@ int rack_get_num_units()
 
 const char* rack_get_module_name()
 {
-	return "Ring Modulator";
+	return "Zap";
 }
 
 const char* rack_get_module_version()
@@ -35,7 +35,7 @@ void* rack_unit_make(int id)
 {
 	switch (id)
 	{
-		case 0: return new RingModulator();
+		case 0: return new Zap();
 		default: return nullptr;
 	}
 }
@@ -47,52 +47,52 @@ void rack_unit_free(void* handle)
 
 const char* rack_unit_get_name(void* handle)
 {
-	return ((RingModulator*)(handle))->get_name().c_str();
+	return ((Zap*)(handle))->get_name().c_str();
 }
 
 void rack_unit_process(void* handle, int num_frames)
 {
-	((RingModulator*)(handle))->process(num_frames);
+	((Zap*)(handle))->process(num_frames);
 }
 
 int rack_unit_get_num_params(void* handle)
 {
-	return ((const RingModulator*)(handle))->get_num_params();
+	return ((const Zap*)(handle))->get_num_params();
 }
 
 int rack_unit_get_num_input_channels(void* handle)
 {
-	return ((const RingModulator*)(handle))->get_num_input_channels();
+	return ((const Zap*)(handle))->get_num_input_channels();
 }
 
 int rack_unit_get_num_output_channels(void* handle)
 {
-	return ((const RingModulator*)(handle))->get_num_output_channels();
+	return ((const Zap*)(handle))->get_num_output_channels();
 }
 
 void* rack_unit_get_input_channel(void* handle, int id)
 {
-	return ((const RingModulator*)(handle))->get_input_channel(id);
+	return ((const Zap*)(handle))->get_input_channel(id);
 }
 
 void* rack_unit_get_output_channel(void* handle, int id)
 {
-	return ((const RingModulator*)(handle))->get_output_channel(id);
+	return ((const Zap*)(handle))->get_output_channel(id);
 }
 
 void* rack_unit_get_param(void* handle, int id)
 {
-	return ((const RingModulator*)(handle))->get_param(id);
+	return ((const Zap*)(handle))->get_param(id);
 }
 
 int rack_unit_get_sample_rate(void* handle)
 {
-	return ((const RingModulator*)(handle))->get_sample_rate();
+	return ((const Zap*)(handle))->get_sample_rate();
 }
 
 void rack_unit_set_sample_rate(void* handle, int sample_rate)
 {
-	((RingModulator*)(handle))->set_sample_rate(sample_rate);
+	((Zap*)(handle))->set_sample_rate(sample_rate);
 }
 
 const char* rack_param_get_name(void* handle)
