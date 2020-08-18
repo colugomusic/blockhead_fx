@@ -16,7 +16,6 @@ Zap::Zap()
 	param_res_->set_size_hint(0.75);
 	param_mix_->set_size_hint(0.5);
 
-
 	param_spread_->begin_notify();
 	param_freq_->begin_notify();
 	param_res_->begin_notify();
