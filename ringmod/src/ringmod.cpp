@@ -10,6 +10,7 @@ RingModulator::RingModulator()
 	: BasicStereoEffect("Ring Modulator")
 {
 	param_freq_ = add_param("Frequency");
+	param_freq_->set_format_hint(Rack_ParamFormatHint_Hertz);
 	param_freq_->set(600.0f);
 	param_freq_->set_min(0.08f);
 	param_freq_->set_max(16700.0f);
@@ -27,25 +28,34 @@ void RingModulator::on_param_value_changed(const Param* p)
 {
 	if (p == param_freq_)
 	{
-		const auto hz = param_freq_->get();
+		ringmod_.set_freq(p->get());
+	}
 
-		// TODO
+	if (p == param_amount_)
+	{
+		ringmod_.set_amount(p->get());
 	}
 }
 
 void RingModulator::on_sample_rate_changed()
 {
-	// TODO
+	ringmod_.set_sr(float(sample_rate_));
+}
+
+void RingModulator::on_trigger_fired(const rack::Trigger* t)
+{
+	if (t == trigger_reset_)
+	{
+		ringmod_.reset(0.0f);
+	}
 }
 
 void RingModulator::process_left(float in, float* out)
 {
-	// TODO
-	*out = in;
+	*out = ringmod_.process_left(in);
 }
 
 void RingModulator::process_right(float in, float* out)
 {
-	// TODO
-	*out = in;
+	*out = ringmod_.process_right(in);
 }
