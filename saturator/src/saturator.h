@@ -6,7 +6,6 @@
 class Saturator : public rack::BasicStereoEffect
 {
 	rack::Param* param_drive_ = nullptr;
-	rack::Param* param_ceiling_ = nullptr;
 
 	snd::audio::saturator::MoronSaturator_Stereo saturator_;
 
