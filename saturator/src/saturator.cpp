@@ -8,9 +8,12 @@ Saturator::Saturator()
 	: BasicStereoEffect("Saturator")
 {
 	param_drive_ = add_param("Drive");
+	param_drive_->set_format_hint(Rack_ParamFormatHint_Percentage);
 
 	param_ceiling_ = add_param("Ceiling");
-	param_ceiling_->set(1.0f);
+	param_ceiling_->set_format_hint(Rack_ParamFormatHint_Decibels);
+	param_ceiling_->set_min(-60.0f);
+	param_ceiling_->set_max(0.0f);
 	param_ceiling_->set_size_hint(0.75f);
 
 	param_drive_->begin_notify();
@@ -19,22 +22,23 @@ Saturator::Saturator()
 
 void Saturator::on_param_value_changed(const Param* p)
 {
-	// TODO
-}
+	if (p == param_drive_)
+	{
+		saturator_.set_drive(p->get());
+	}
 
-void Saturator::on_sample_rate_changed()
-{
-	// TODO
+	if (p == param_ceiling_)
+	{
+		saturator_.set_ceiling_db(p->get());
+	}
 }
 
 void Saturator::process_left(float in, float* out)
 {
-	// TODO
-	*out = in;
+	*out = saturator_.process_left(in);
 }
 
 void Saturator::process_right(float in, float* out)
 {
-	// TODO
-	*out = in;
+	*out = saturator_.process_right(in);
 }

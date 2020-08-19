@@ -4,10 +4,15 @@ set(dir_submodules ${CMAKE_CURRENT_LIST_DIR}/../submodules)
 set(dir_rack++ ${dir_submodules}/rackpp)
 set(dir_rack ${dir_rack++}/submodules/rack)
 set(dir_rack++module ${dir_rack++}/module)
+set(dir_snd ${dir_submodules}/snd)
 set(dir_front ${CMAKE_CURRENT_LIST_DIR}/../../../front)
 
 if (NOT TARGET rack++module)
 	add_subdirectory(${dir_rack++/module} rack++module)
+endif()
+
+if (NOT TARGET snd)
+	add_subdirectory(${dir_snd} snd)
 endif()
 
 list(APPEND HEADERS
@@ -25,11 +30,13 @@ add_library(${PROJECT_NAME} SHARED ${HEADERS} ${SRC})
 
 target_include_directories(${PROJECT_NAME} PRIVATE
 	${CMAKE_CURRENT_LIST_DIR}/..
+	${dir_snd}/include
 	${dir_rack}/include
 	${dir_rack++module}/include
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
+	snd
 	rack++module
 )
 
