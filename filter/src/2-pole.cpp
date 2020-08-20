@@ -7,6 +7,8 @@ using namespace rack;
 
 Filter_2Pole::Filter_2Pole()
 	: BasicStereoEffect("Filter (2P)")
+	, smoother_freq_(float(sample_rate_), 0.02f, 1000.0f, std::bind(&snd::audio::filter::Filter_2Pole_Stereo::set_freq, &filter_, std::placeholders::_1, true))
+	, smoother_res_(float(sample_rate_), 0.02f, 1000.0f, std::bind(&snd::audio::filter::Filter_2Pole_Stereo::set_res, &filter_, std::placeholders::_1, true))
 {
 	param_freq_ = add_param("Frequency");
 
@@ -32,20 +34,6 @@ Filter_2Pole::Filter_2Pole()
 
 void Filter_2Pole::on_param_value_changed(const Param* p)
 {
-	if (p == param_freq_)
-	{
-		const auto hz = param_freq_->get();
-
-		filter_.set_freq(hz);
-	}
-
-	if (p == param_res_)
-	{
-		const auto res = param_res_->get();
-
-		filter_.set_res(res);
-	}
-
 	if (p == param_mode_)
 	{
 		const auto mode_value = param_mode_->get();
@@ -57,6 +45,12 @@ void Filter_2Pole::on_param_value_changed(const Param* p)
 void Filter_2Pole::on_sample_rate_changed()
 {
 	filter_.set_sr(float(sample_rate_));
+}
+
+void Filter_2Pole::update()
+{
+	smoother_freq_(param_freq_->get());
+	smoother_res_(param_res_->get());
 }
 
 void Filter_2Pole::process_left(float in, float* out)
