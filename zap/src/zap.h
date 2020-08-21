@@ -5,6 +5,9 @@
 
 class Zap : public rack::BasicStereoEffect
 {
+	static constexpr float MIN_FREQ = 130.0f;
+	static constexpr float MAX_FREQ = 4000.0f;
+
 	rack::SmoothParam* param_spread_ = nullptr;
 	rack::SmoothParam* param_freq_ = nullptr;
 	rack::SmoothParam* param_res_ = nullptr;

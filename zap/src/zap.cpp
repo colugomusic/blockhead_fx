@@ -21,8 +21,8 @@ Zap::Zap()
 	param_freq_->set(400.0f);
 	param_freq_->set_default_value(400.0f);
 	param_freq_->set_format_hint(Rack_ParamFormatHint_Hertz);
-	param_freq_->set_min(100.0f);
-	param_freq_->set_max(4000.0f);
+	param_freq_->set_min(MIN_FREQ);
+	param_freq_->set_max(MAX_FREQ);
 
 	param_res_ = add_smooth_param("Resonance");
 	param_res_->add_callback([this](float v) { filter_.set_res(v / 100.0f); });
@@ -50,16 +50,20 @@ void Zap::on_freq_changed(float v)
 {
 	freq_ = v;
 
-	filter_.set_freq_L(freq_ - (spread_ * 1.0f));
-	filter_.set_freq_R(freq_ + (spread_ * 1.0f));
+	const auto offset = spread_ * (std::signbit(spread_) ? 1 : -1) * 1000.0f;
+
+	filter_.set_freq_L(std::max(MIN_FREQ, freq_ - offset));
+	filter_.set_freq_R(std::min(MAX_FREQ, freq_ + offset));
 }
 
 void Zap::on_spread_changed(float v)
 {
-	spread_ = v;
+	spread_ = std::pow(v / 100.0f, 2.f);
 
-	filter_.set_freq_L(freq_ - (spread_ * 1.0f));
-	filter_.set_freq_R(freq_ + (spread_ * 1.0f));
+	const auto offset = spread_ * (std::signbit(spread_) ? 1 : -1) * 1000.0f;
+
+	filter_.set_freq_L(std::max(MIN_FREQ, freq_ - offset));
+	filter_.set_freq_R(std::min(MAX_FREQ, freq_ + offset));
 }
 
 void Zap::on_sample_rate_changed(int new_SR)
