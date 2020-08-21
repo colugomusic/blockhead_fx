@@ -5,15 +5,15 @@
 
 class Filter_1Pole : public rack::BasicStereoEffect
 {
-	rack::Param* param_freq_ = nullptr;
+	rack::SmoothParam* param_freq_ = nullptr;
 	rack::Param* param_mode_ = nullptr;
 
 	enum class Mode { LP, HP } mode_ = Mode::LP;
 
 	snd::audio::filter::Filter_1Pole_Stereo filter_;
 
-	void on_param_value_changed(const rack::Param* p) override;
-	void on_sample_rate_changed() override;
+	void on_param_value_changed(const rack::Param* p, float new_value) override;
+	void on_sample_rate_changed(int new_SR) override;
 
 	void process_left(float in, float* out) override;
 	void process_right(float in, float* out) override;

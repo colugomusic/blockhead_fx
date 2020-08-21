@@ -98,7 +98,7 @@ void rack_unit_set_sample_rate(void* handle, int sample_rate)
 
 const char* rack_param_get_name(void* handle)
 {
-	return ((rack::Param*)(handle))->name.c_str();
+	return ((rack::Param*)(handle))->get_name().c_str();
 }
 
 void rack_param_set_value(void* handle, float value)
@@ -109,6 +109,11 @@ void rack_param_set_value(void* handle, float value)
 float rack_param_get_value(void* handle)
 {
 	return ((rack::Param*)(handle))->get();
+}
+
+float rack_param_get_default_value(void* handle)
+{
+	return ((rack::Param*)(handle))->get_default_value();
 }
 
 Rack_ParamFormatHint rack_param_get_format_hint(void* handle)

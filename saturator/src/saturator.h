@@ -5,11 +5,12 @@
 
 class Saturator : public rack::BasicStereoEffect
 {
-	rack::Param* param_drive_ = nullptr;
+	rack::SmoothParam* param_drive_ = nullptr;
+	rack::SmoothParam* param_gain_ = nullptr;
 
 	snd::audio::saturator::MoronSaturator_Stereo saturator_;
 
-	void on_param_value_changed(const rack::Param* p) override;
+	float gain_af_ = 1.0f;
 
 	void process_left(float in, float* out) override;
 	void process_right(float in, float* out) override;

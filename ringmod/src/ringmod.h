@@ -5,14 +5,13 @@
 
 class RingModulator : public rack::BasicStereoEffect
 {
-	rack::Param* param_freq_ = nullptr;
-	rack::Param* param_amount_ = nullptr;
+	rack::SmoothParam* param_freq_ = nullptr;
+	rack::SmoothParam* param_amount_ = nullptr;
 	rack::Trigger* trigger_reset_ = nullptr;
 
 	snd::audio::ringmod::RingModulator_Stereo ringmod_;
 
-	void on_param_value_changed(const rack::Param* p) override;
-	void on_sample_rate_changed() override;
+	void on_sample_rate_changed(int new_SR) override;
 	void on_trigger_fired(const rack::Trigger* t) override;
 
 	void process_left(float in, float* out) override;

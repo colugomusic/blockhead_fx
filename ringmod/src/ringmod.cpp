@@ -1,21 +1,30 @@
 #include <algorithm>
 #include <rack++/module/channel.h>
-#include <rack++/module/param.h>
+#include <rack++/module/smooth_param.h>
 #include <rack++/module/trigger.h>
 #include "ringmod.h"
 
+using namespace snd;
 using namespace rack;
+using namespace std::placeholders;
 
 RingModulator::RingModulator()
 	: BasicStereoEffect("Ring Modulator")
 {
-	param_freq_ = add_param("Frequency");
+	param_freq_ = add_smooth_param("Frequency");
+
+	param_freq_->add_callback(std::bind(&audio::ringmod::RingModulator_Stereo::set_freq, &ringmod_, _1, true));
+
 	param_freq_->set_format_hint(Rack_ParamFormatHint_Hertz);
 	param_freq_->set(600.0f);
+	param_freq_->set_default_value(600.0f);
 	param_freq_->set_min(0.08f);
 	param_freq_->set_max(16700.0f);
 
-	param_amount_ = add_param("Amount");
+	param_amount_ = add_smooth_param("Amount");
+
+	param_amount_->add_callback(std::bind(&audio::ringmod::RingModulator_Stereo::set_amount, &ringmod_, _1));
+
 	param_amount_->set_size_hint(0.75f);
 
 	trigger_reset_ = add_trigger("Reset");
@@ -24,22 +33,9 @@ RingModulator::RingModulator()
 	param_amount_->begin_notify();
 }
 
-void RingModulator::on_param_value_changed(const Param* p)
+void RingModulator::on_sample_rate_changed(int new_SR)
 {
-	if (p == param_freq_)
-	{
-		ringmod_.set_freq(p->get());
-	}
-
-	if (p == param_amount_)
-	{
-		ringmod_.set_amount(p->get());
-	}
-}
-
-void RingModulator::on_sample_rate_changed()
-{
-	ringmod_.set_sr(float(sample_rate_));
+	ringmod_.set_sr(sample_rate_);
 }
 
 void RingModulator::on_trigger_fired(const rack::Trigger* t)

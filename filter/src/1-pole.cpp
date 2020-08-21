@@ -1,15 +1,16 @@
 #include <algorithm>
 #include "1-pole.h"
-#include <rack++/module/param.h>
+#include <rack++/module/smooth_param.h>
 #include <rack++/module/channel.h>
 
 using namespace rack;
+using namespace std::placeholders;
 
 Filter_1Pole::Filter_1Pole()
 	: BasicStereoEffect("Filter (1P)")
 {
-	param_freq_ = add_param("Frequency");
-
+	param_freq_ = add_smooth_param("Frequency");
+	param_freq_->add_callback(std::bind(&snd::audio::filter::Filter_1Pole_Stereo::set_freq, filter_, _1, true));
 	param_freq_->set(600.0f);
 	param_freq_->set_min(0.08f);
 	param_freq_->set_max(16700.0f);
@@ -23,30 +24,19 @@ Filter_1Pole::Filter_1Pole()
 	param_mode_->begin_notify();
 }
 
-void Filter_1Pole::on_param_value_changed(const Param* p)
+void Filter_1Pole::on_param_value_changed(const Param* p, float new_value)
 {
-	if (p == param_freq_)
-	{
-		const auto hz = param_freq_->get();
-
-		filter_.set_freq(hz);
-
-		return;
-	}
-
 	if (p == param_mode_)
 	{
-		const auto mode_value = param_mode_->get();
-
-		mode_ = mode_value < 1.0 ? Mode::LP : Mode::HP;
+		mode_ = new_value < 1.0 ? Mode::LP : Mode::HP;
 
 		return;
 	}
 }
 
-void Filter_1Pole::on_sample_rate_changed()
+void Filter_1Pole::on_sample_rate_changed(int new_SR)
 {
-	filter_.set_sr(float(sample_rate_));
+	filter_.set_sr(float(new_SR));
 }
 
 void Filter_1Pole::process_left(float in, float* out)
