@@ -36,7 +36,7 @@ void Filter_1Pole::on_param_value_changed(const Param* p, float new_value)
 
 void Filter_1Pole::on_sample_rate_changed(int new_SR)
 {
-	filter_.set_sr(float(new_SR));
+	filter_.set_sr(new_SR);
 }
 
 void Filter_1Pole::process_left(float in, float* out)
