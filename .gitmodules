@@ -1,6 +1,3 @@
-[submodule "submodules/snd"]
-	path = submodules/snd
-	url = https://github.com/colugomusic/snd
 [submodule "submodules/rackpp"]
 	path = submodules/rackpp
 	url = https://github.com/colugomusic/rackpp
