@@ -29,4 +29,7 @@ class Zap : public rack::BasicStereoEffect
 public:
 
 	Zap();
+
+	void copy(const Zap& rhs);
+	void reset();
 };

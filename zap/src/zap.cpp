@@ -80,3 +80,31 @@ void Zap::process_right(float in, float* out)
 {
 	*out = snd::lerp(in, filter_.process_R(in), mix_);
 }
+
+void Zap::copy(const Zap& rhs)
+{
+	param_spread_->copy(*rhs.param_spread_);
+	param_freq_->copy(*rhs.param_freq_);
+	param_res_->copy(*rhs.param_res_);
+	param_mix_->copy(*rhs.param_mix_);
+
+	freq_ = rhs.freq_;
+	spread_ = rhs.spread_;
+	mix_ = rhs.mix_;
+
+	filter_ = rhs.filter_;
+}
+
+void Zap::reset()
+{
+	param_spread_->reset();
+	param_freq_->reset();
+	param_res_->reset();
+	param_mix_->reset();
+
+	freq_ = 400.0f;
+	spread_ = 0.0f;
+	mix_ = 1.0f;
+
+	filter_ = snd::audio::filter::Filter_2Pole_AllpassArray_Stereo<32>();
+}
