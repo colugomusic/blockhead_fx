@@ -11,22 +11,19 @@ Filter_2Pole::Filter_2Pole()
 	//, smoother_freq_(sample_rate_, 0.02f, 1000.0f, std::bind(&snd::audio::filter::Filter_2Pole_Stereo::set_freq, &filter_, std::placeholders::_1, true))
 	//, smoother_res_(sample_rate_, 0.02f, 1000.0f, std::bind(&snd::audio::filter::Filter_2Pole_Stereo::set_res, &filter_, std::placeholders::_1, true))
 {
-	param_freq_ = add_smooth_param("Frequency");
+	param_freq_ = add_smooth_param(1000.0f, "Frequency");
 
 	param_freq_->add_callback(std::bind(&snd::audio::filter::Filter_2Pole_Stereo::set_freq, &filter_, _1, true));
 
-	param_freq_->set_default_value(600.0f);
-	param_freq_->set(600.0f);
 	param_freq_->set_format_hint(Rack_ParamFormatHint_Hertz);
 	param_freq_->set_min(0.08f);
 	param_freq_->set_max(16700.0f);
 
-	param_res_ = add_smooth_param("Resonance");
+	param_res_ = add_smooth_param(0.0f, "Resonance");
 
 	param_res_->add_callback([this](float value) { filter_.set_res(value / 100.0f); });
 
 	param_res_->set_format_hint(Rack_ParamFormatHint_Percentage);
-	param_res_->set(0.0f);
 	param_res_->set_min(0.0f);
 	param_res_->set_max(100.0f);
 	param_res_->set_size_hint(0.75f);
@@ -39,6 +36,26 @@ Filter_2Pole::Filter_2Pole()
 	param_freq_->begin_notify();
 	param_res_->begin_notify();
 	param_mode_->begin_notify();
+}
+
+void Filter_2Pole::copy(const Filter_2Pole& rhs)
+{
+	Unit::copy(rhs);
+
+	res_ = rhs.res_;
+	mode_ = rhs.mode_;
+
+	filter_ = rhs.filter_;
+}
+
+void Filter_2Pole::reset()
+{
+	Unit::reset();
+
+	res_ = 0.0f;
+	mode_ = Mode::LP;
+
+	filter_ = snd::audio::filter::Filter_2Pole_Stereo();
 }
 
 void Filter_2Pole::on_param_value_changed(const Param* p, float new_value)

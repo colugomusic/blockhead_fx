@@ -18,4 +18,5 @@ public:
 
 	rack::Unit* unit();
 	const rack::Unit* unit() const;
+	const FilterType type() const;
 };

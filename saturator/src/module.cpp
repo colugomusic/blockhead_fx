@@ -95,6 +95,18 @@ void rack_unit_set_sample_rate(void* handle, int sample_rate)
 	((Saturator*)(handle))->set_sample_rate(sample_rate);
 }
 
+char rack_unit_copy(void* dest, void* source)
+{
+	((Saturator*)(dest))->copy(*((Saturator*)(source)));
+
+	return 1;
+}
+
+void rack_unit_reset(void* handle)
+{
+	((Saturator*)(handle))->reset();
+}
+
 const char* rack_param_get_name(void* handle)
 {
 	return ((rack::Param*)(handle))->get_name().c_str();

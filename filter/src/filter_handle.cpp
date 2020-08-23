@@ -37,3 +37,8 @@ const Unit* FilterHandle::unit() const
 {
 	return unit_;
 }
+
+const FilterType FilterHandle::type() const
+{
+	return type_;
+}

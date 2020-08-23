@@ -11,26 +11,41 @@ using namespace std::placeholders;
 RingModulator::RingModulator()
 	: BasicStereoEffect("Ring Modulator")
 {
-	param_freq_ = add_smooth_param("Frequency");
+	param_freq_ = add_smooth_param(1000.0f, "Frequency");
 
 	param_freq_->add_callback(std::bind(&audio::ringmod::RingModulator_Stereo::set_freq, &ringmod_, _1, true));
 
 	param_freq_->set_format_hint(Rack_ParamFormatHint_Hertz);
-	param_freq_->set(600.0f);
-	param_freq_->set_default_value(600.0f);
 	param_freq_->set_min(0.08f);
 	param_freq_->set_max(16700.0f);
 
-	param_amount_ = add_smooth_param("Amount");
+	param_amount_ = add_smooth_param(100.0f, "Amount");
 
-	param_amount_->add_callback(std::bind(&audio::ringmod::RingModulator_Stereo::set_amount, &ringmod_, _1));
+	param_amount_->add_callback([this](float v) { ringmod_.set_amount(v / 100.0f); });
 
 	param_amount_->set_size_hint(0.75f);
+	param_amount_->set_format_hint(Rack_ParamFormatHint_Percentage);
+	param_amount_->set_min(0.0f);
+	param_amount_->set_max(100.0f);
 
 	trigger_reset_ = add_trigger("Reset");
 
 	param_freq_->begin_notify();
 	param_amount_->begin_notify();
+}
+
+void RingModulator::copy(const RingModulator& rhs)
+{
+	Unit::copy(rhs);
+
+	ringmod_ = rhs.ringmod_;
+}
+
+void RingModulator::reset()
+{
+	Unit::reset();
+
+	ringmod_ = snd::audio::ringmod::RingModulator_Stereo();
 }
 
 void RingModulator::on_sample_rate_changed(int new_SR)

@@ -20,4 +20,7 @@ class RingModulator : public rack::BasicStereoEffect
 public:
 
 	RingModulator();
+
+	void copy(const RingModulator& rhs);
+	void reset() override;
 };

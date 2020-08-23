@@ -31,5 +31,5 @@ public:
 	Zap();
 
 	void copy(const Zap& rhs);
-	void reset();
+	void reset() override;
 };

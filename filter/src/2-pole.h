@@ -24,4 +24,7 @@ class Filter_2Pole : public rack::BasicStereoEffect
 public:
 
 	Filter_2Pole();
+
+	void copy(const Filter_2Pole& rhs);
+	void reset() override;
 };

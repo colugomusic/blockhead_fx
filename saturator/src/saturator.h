@@ -18,4 +18,7 @@ class Saturator : public rack::BasicStereoEffect
 public:
 
 	Saturator();
+
+	void copy(const Saturator& rhs);
+	void reset() override;
 };

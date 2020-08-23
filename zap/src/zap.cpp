@@ -9,36 +9,32 @@ using namespace std::placeholders;
 Zap::Zap()
 	: BasicStereoEffect("Zap")
 {
-	param_spread_ = add_smooth_param("Spread");
+	param_spread_ = add_smooth_param(0.0f, "Spread");
 	param_spread_->add_callback(std::bind(&Zap::on_spread_changed, this, _1));
 	param_spread_->set_size_hint(0.75);
 	param_spread_->set_format_hint(Rack_ParamFormatHint_Percentage);
 	param_spread_->set_min(-100.0f);
 	param_spread_->set_max(100.0f);
 
-	param_freq_ = add_smooth_param("Frequency");
+	param_freq_ = add_smooth_param(1000.0f, "Frequency");
 	param_freq_->add_callback(std::bind(&Zap::on_freq_changed, this, _1));
-	param_freq_->set(400.0f);
-	param_freq_->set_default_value(400.0f);
 	param_freq_->set_format_hint(Rack_ParamFormatHint_Hertz);
 	param_freq_->set_min(MIN_FREQ);
 	param_freq_->set_max(MAX_FREQ);
 
-	param_res_ = add_smooth_param("Resonance");
+	param_res_ = add_smooth_param(50.0f, "Resonance");
 	param_res_->add_callback([this](float v) { filter_.set_res(v / 100.0f); });
 	param_res_->set_size_hint(0.75);
 	param_res_->set_format_hint(Rack_ParamFormatHint_Percentage);
 	param_res_->set_min(0.0f);
 	param_res_->set_max(100.0f);
 
-	param_mix_ = add_smooth_param("Mix");
+	param_mix_ = add_smooth_param(100.0f, "Mix");
 	param_mix_->add_callback([this](float v) { mix_ = v / 100.0f; });
 	param_mix_->set_size_hint(0.5);
 	param_mix_->set_format_hint(Rack_ParamFormatHint_Percentage);
 	param_mix_->set_min(0.0f);
 	param_mix_->set_max(100.0f);
-	param_mix_->set(100.0f);
-	param_mix_->set_default_value(100.0f);
 
 	param_spread_->begin_notify();
 	param_freq_->begin_notify();
@@ -83,10 +79,7 @@ void Zap::process_right(float in, float* out)
 
 void Zap::copy(const Zap& rhs)
 {
-	param_spread_->copy(*rhs.param_spread_);
-	param_freq_->copy(*rhs.param_freq_);
-	param_res_->copy(*rhs.param_res_);
-	param_mix_->copy(*rhs.param_mix_);
+	Unit::copy(rhs);
 
 	freq_ = rhs.freq_;
 	spread_ = rhs.spread_;
@@ -97,10 +90,7 @@ void Zap::copy(const Zap& rhs)
 
 void Zap::reset()
 {
-	param_spread_->reset();
-	param_freq_->reset();
-	param_res_->reset();
-	param_mix_->reset();
+	Unit::reset();
 
 	freq_ = 400.0f;
 	spread_ = 0.0f;

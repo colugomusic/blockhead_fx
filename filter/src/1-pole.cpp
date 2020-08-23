@@ -9,11 +9,11 @@ using namespace std::placeholders;
 Filter_1Pole::Filter_1Pole()
 	: BasicStereoEffect("Filter (1P)")
 {
-	param_freq_ = add_smooth_param("Frequency");
+	param_freq_ = add_smooth_param(1000.0f, "Frequency");
 	param_freq_->add_callback(std::bind(&snd::audio::filter::Filter_1Pole_Stereo::set_freq, filter_, _1, true));
-	param_freq_->set(600.0f);
 	param_freq_->set_min(0.08f);
 	param_freq_->set_max(16700.0f);
+	param_freq_->set_format_hint(Rack_ParamFormatHint_Hertz);
 
 	param_mode_ = add_switch_param({ "LP", "HP" }, "Mode");
 
@@ -22,6 +22,24 @@ Filter_1Pole::Filter_1Pole()
 
 	param_freq_->begin_notify();
 	param_mode_->begin_notify();
+}
+
+void Filter_1Pole::copy(const Filter_1Pole& rhs)
+{
+	Unit::copy(rhs);
+
+	mode_ = rhs.mode_;
+
+	filter_ = rhs.filter_;
+}
+
+void Filter_1Pole::reset()
+{
+	Unit::reset();
+
+	mode_ = Mode::LP;
+
+	filter_ = snd::audio::filter::Filter_1Pole_Stereo();
 }
 
 void Filter_1Pole::on_param_value_changed(const Param* p, float new_value)

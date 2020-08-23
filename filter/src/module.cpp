@@ -5,6 +5,8 @@
 #include <rack++/module/trigger.h>
 #include <rack++/module/unit.h>
 #include "filter_handle.h"
+#include "1-pole.h"
+#include "2-pole.h"
 
 const char* rack_get_api_version()
 {
@@ -94,6 +96,40 @@ int rack_unit_get_sample_rate(void* handle)
 void rack_unit_set_sample_rate(void* handle, int sample_rate)
 {
 	((FilterHandle*)(handle))->unit()->set_sample_rate(sample_rate);
+}
+
+char rack_unit_copy(void* dest, void* source)
+{
+	auto dest_handle = ((FilterHandle*)(dest));
+	auto source_handle = ((FilterHandle*)(source));
+
+	switch (dest_handle->type())
+	{
+		case FilterType::Filter_1Pole:
+		{
+			if (source_handle->type() != FilterType::Filter_1Pole) return 0;
+
+			((Filter_1Pole*)(dest_handle->unit()))->copy(*((Filter_1Pole*)(source_handle->unit())));
+			
+			return 1;
+		}
+
+		case FilterType::Filter_2Pole:
+		{
+			if (source_handle->type() != FilterType::Filter_2Pole) return 0;
+
+			((Filter_2Pole*)(dest_handle->unit()))->copy(*((Filter_2Pole*)(source_handle->unit())));
+
+			return 1;
+		}
+	}
+	
+	return 0;
+}
+
+void rack_unit_reset(void* handle)
+{
+	((FilterHandle*)(handle))->unit()->reset();
 }
 
 const char* rack_param_get_name(void* handle)
