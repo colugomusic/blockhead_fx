@@ -17,7 +17,7 @@ class Zap : public rack::BasicStereoEffect
 	float spread_ = 0.0f;
 	float mix_ = 1.0f;
 
-	snd::audio::filter::Filter_2Pole_AllpassArray_Stereo<32> filter_;
+	snd::audio::filter::Filter_2Pole_AllpassArray_Stereo<64> filter_;
 
 	void on_freq_changed(float v);
 	void on_spread_changed(float v);

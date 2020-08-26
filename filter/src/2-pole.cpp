@@ -1,6 +1,7 @@
 #include "2-pole.h"
 #include <rack++/module/channel.h>
 #include <rack++/module/smooth_param.h>
+#include <rack++/module/trigger.h>
 #include <algorithm>
 
 using namespace rack;
@@ -8,10 +9,12 @@ using namespace std::placeholders;
 
 Filter_2Pole::Filter_2Pole()
 	: BasicStereoEffect("Filter (2P)")
-	//, smoother_freq_(sample_rate_, 0.02f, 1000.0f, std::bind(&snd::audio::filter::Filter_2Pole_Stereo::set_freq, &filter_, std::placeholders::_1, true))
-	//, smoother_res_(sample_rate_, 0.02f, 1000.0f, std::bind(&snd::audio::filter::Filter_2Pole_Stereo::set_res, &filter_, std::placeholders::_1, true))
 {
 	param_freq_ = add_smooth_param(1000.0f, "Frequency");
+	param_res_ = add_smooth_param(0.0f, "Resonance");
+	trigger_reset_ = add_trigger("_reset");
+
+	trigger_reset_->add_callback(std::bind(&Filter_2Pole::reset, this));
 
 	param_freq_->add_callback(std::bind(&snd::audio::filter::Filter_2Pole_Stereo::set_freq, &filter_, _1, true));
 
@@ -19,7 +22,6 @@ Filter_2Pole::Filter_2Pole()
 	param_freq_->set_min(0.08f);
 	param_freq_->set_max(16700.0f);
 
-	param_res_ = add_smooth_param(0.0f, "Resonance");
 
 	param_res_->add_callback([this](float value) { filter_.set_res(value / 100.0f); });
 
@@ -42,7 +44,6 @@ void Filter_2Pole::copy(const Filter_2Pole& rhs)
 {
 	Unit::copy(rhs);
 
-	res_ = rhs.res_;
 	mode_ = rhs.mode_;
 
 	filter_ = rhs.filter_;
@@ -51,9 +52,6 @@ void Filter_2Pole::copy(const Filter_2Pole& rhs)
 void Filter_2Pole::reset()
 {
 	Unit::reset();
-
-	res_ = 0.0f;
-	mode_ = Mode::LP;
 
 	filter_ = snd::audio::filter::Filter_2Pole_Stereo();
 }

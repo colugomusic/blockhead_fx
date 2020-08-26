@@ -9,8 +9,8 @@ class Filter_2Pole : public rack::BasicStereoEffect
 	rack::SmoothParam* param_freq_ = nullptr;
 	rack::SmoothParam* param_res_ = nullptr;
 	rack::Param* param_mode_ = nullptr;
+	rack::Trigger* trigger_reset_;
 
-	float res_ = 0.0f;
 	enum class Mode { LP, BP, HP } mode_ = Mode::LP;
 
 	snd::audio::filter::Filter_2Pole_Stereo filter_;

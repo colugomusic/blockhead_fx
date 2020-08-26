@@ -96,5 +96,5 @@ void Zap::reset()
 	spread_ = 0.0f;
 	mix_ = 1.0f;
 
-	filter_ = snd::audio::filter::Filter_2Pole_AllpassArray_Stereo<32>();
+	filter_.reset();
 }

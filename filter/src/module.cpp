@@ -37,7 +37,7 @@ void* rack_unit_make(int id)
 {
 	switch (id)
 	{
-		case 0: return new FilterHandle(FilterType::Filter_1Pole);
+		case 0: return nullptr; // disabled // new FilterHandle(FilterType::Filter_1Pole);
 		case 1: return new FilterHandle(FilterType::Filter_2Pole);
 		default: return nullptr;
 	}
