@@ -42,9 +42,20 @@ Zap::Zap()
 	param_mix_->begin_notify();
 }
 
+ml::DSPVectorArray<2> Zap::operator()(const ml::DSPVectorArray<2>& in)
+{
+	ml::DSPVectorArray<2> out;
+
+	out = filter_(in);
+
+	ml::DSPVector mix(mix_);
+
+	return ml::lerp(in, out, ml::append(mix, mix));
+}
+
 void Zap::on_freq_changed(float v)
 {
-	freq_ = v;
+	freq_ = v; 
 
 	const auto offset = spread_ * (std::signbit(spread_) ? 1 : -1) * 1000.0f;
 
@@ -65,36 +76,4 @@ void Zap::on_spread_changed(float v)
 void Zap::on_sample_rate_changed(int new_SR)
 {
 	filter_.set_sr(new_SR);
-}
-
-void Zap::process_left(float in, float* out)
-{
-	*out = snd::lerp(in, filter_.process_L(in), mix_);
-}
-
-void Zap::process_right(float in, float* out)
-{
-	*out = snd::lerp(in, filter_.process_R(in), mix_);
-}
-
-void Zap::copy(const Zap& rhs)
-{
-	Unit::copy(rhs);
-
-	freq_ = rhs.freq_;
-	spread_ = rhs.spread_;
-	mix_ = rhs.mix_;
-
-	filter_ = rhs.filter_;
-}
-
-void Zap::reset()
-{
-	Unit::reset();
-
-	freq_ = 400.0f;
-	spread_ = 0.0f;
-	mix_ = 1.0f;
-
-	filter_.reset();
 }

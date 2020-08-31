@@ -18,13 +18,9 @@ class Filter_2Pole : public rack::BasicStereoEffect
 	void on_param_value_changed(const rack::Param* p, float new_value) override;
 	void on_sample_rate_changed(int new_SR) override;
 
-	void process_left(float in, float* out) override;
-	void process_right(float in, float* out) override;
+	ml::DSPVectorArray<2> operator()(const ml::DSPVectorArray<2>& in) override;
 
 public:
 
 	Filter_2Pole();
-
-	void copy(const Filter_2Pole& rhs);
-	void reset() override;
 };

@@ -15,13 +15,9 @@ class Filter_1Pole : public rack::BasicStereoEffect
 	void on_param_value_changed(const rack::Param* p, float new_value) override;
 	void on_sample_rate_changed(int new_SR) override;
 
-	void process_left(float in, float* out) override;
-	void process_right(float in, float* out) override;
+	ml::DSPVectorArray<2> operator()(const ml::DSPVectorArray<2>& in) override;
 
 public:
 
 	Filter_1Pole();
-
-	void copy(const Filter_1Pole& rhs);
-	void reset() override;
 };

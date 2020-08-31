@@ -24,22 +24,21 @@ Filter_1Pole::Filter_1Pole()
 	param_mode_->begin_notify();
 }
 
-void Filter_1Pole::copy(const Filter_1Pole& rhs)
+ml::DSPVectorArray<2> Filter_1Pole::operator()(const ml::DSPVectorArray<2>& in)
 {
-	Unit::copy(rhs);
+	ml::DSPVectorArray<2> out;
 
-	mode_ = rhs.mode_;
+	filter_(in);
 
-	filter_ = rhs.filter_;
-}
+	switch (mode_)
+	{
+		default:
+		case Mode::LP:
+			return filter_.lp();
 
-void Filter_1Pole::reset()
-{
-	Unit::reset();
-
-	mode_ = Mode::LP;
-
-	filter_ = snd::audio::filter::Filter_1Pole_Stereo();
+		case Mode::HP:
+			return filter_.hp();
+	}
 }
 
 void Filter_1Pole::on_param_value_changed(const Param* p, float new_value)
@@ -55,36 +54,4 @@ void Filter_1Pole::on_param_value_changed(const Param* p, float new_value)
 void Filter_1Pole::on_sample_rate_changed(int new_SR)
 {
 	filter_.set_sr(new_SR);
-}
-
-void Filter_1Pole::process_left(float in, float* out)
-{
-	filter_.process_left(in);
-
-	switch (mode_)
-	{
-		case Mode::LP:
-			*out = filter_.lp_L();
-			break;
-
-		case Mode::HP:
-			*out = filter_.hp_L();
-			break;
-	}
-}
-
-void Filter_1Pole::process_right(float in, float* out)
-{
-	filter_.process_right(in);
-
-	switch (mode_)
-	{
-		case Mode::LP:
-			*out = filter_.lp_R();
-			break;
-
-		case Mode::HP:
-			*out = filter_.hp_R();
-			break;
-	}
 }

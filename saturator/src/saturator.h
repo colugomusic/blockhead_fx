@@ -12,13 +12,9 @@ class Saturator : public rack::BasicStereoEffect
 
 	float gain_af_ = 1.0f;
 
-	void process_left(float in, float* out) override;
-	void process_right(float in, float* out) override;
+	ml::DSPVectorArray<2> operator()(const ml::DSPVectorArray<2>& in) override;
 
 public:
 
 	Saturator();
-
-	void copy(const Saturator& rhs);
-	void reset() override;
 };

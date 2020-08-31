@@ -34,20 +34,6 @@ RingModulator::RingModulator()
 	param_amount_->begin_notify();
 }
 
-void RingModulator::copy(const RingModulator& rhs)
-{
-	Unit::copy(rhs);
-
-	ringmod_ = rhs.ringmod_;
-}
-
-void RingModulator::reset()
-{
-	Unit::reset();
-
-	ringmod_ = snd::audio::ringmod::RingModulator_Stereo();
-}
-
 void RingModulator::on_sample_rate_changed(int new_SR)
 {
 	ringmod_.set_sr(sample_rate_);
@@ -61,12 +47,7 @@ void RingModulator::on_trigger_fired(const rack::Trigger* t)
 	}
 }
 
-void RingModulator::process_left(float in, float* out)
+ml::DSPVectorArray<2> RingModulator::operator()(const ml::DSPVectorArray<2>& in)
 {
-	*out = ringmod_.process_left(in);
-}
-
-void RingModulator::process_right(float in, float* out)
-{
-	*out = ringmod_.process_right(in);
+	return ringmod_(in);
 }

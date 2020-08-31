@@ -30,30 +30,7 @@ Saturator::Saturator()
 	param_gain_->begin_notify();
 }
 
-void Saturator::copy(const Saturator& rhs)
+ml::DSPVectorArray<2> Saturator::operator()(const ml::DSPVectorArray<2>& in)
 {
-	Unit::copy(rhs);
-
-	gain_af_ = rhs.gain_af_;
-
-	saturator_ = rhs.saturator_;
-}
-
-void Saturator::reset()
-{
-	Unit::reset();
-
-	gain_af_ = 1.0f;
-
-	saturator_ = snd::audio::saturator::MoronSaturator_Stereo();
-}
-
-void Saturator::process_left(float in, float* out)
-{
-	*out = saturator_.process_left(in) * gain_af_;
-}
-
-void Saturator::process_right(float in, float* out)
-{
-	*out = saturator_.process_right(in) * gain_af_;
+	return saturator_(in) * ml::DSPVectorArray<2>(gain_af_);
 }

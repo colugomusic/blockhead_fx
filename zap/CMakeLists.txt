@@ -4,6 +4,7 @@ set(dir_submodules ${CMAKE_CURRENT_LIST_DIR}/../submodules)
 set(dir_rack++ ${dir_submodules}/rackpp)
 set(dir_rack ${dir_rack++}/submodules/rack)
 set(dir_rack++module ${dir_rack++}/module)
+set(dir_madronalib ${dir_rack++}/submodules/snd/submodules/madronalib)
 set(dir_front ${CMAKE_CURRENT_LIST_DIR}/../../../front)
 
 if (NOT TARGET rack++module)
@@ -27,6 +28,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 	${CMAKE_CURRENT_LIST_DIR}/..
 	${dir_rack}/include
 	${dir_rack++module}/include
+	${dir_madronalib}/source
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE

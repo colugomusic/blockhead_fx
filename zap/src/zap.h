@@ -23,13 +23,10 @@ class Zap : public rack::BasicStereoEffect
 	void on_spread_changed(float v);
 	void on_sample_rate_changed(int new_SR) override;
 
-	void process_left(float in, float* out) override;
-	void process_right(float in, float* out) override;
+	ml::DSPVectorArray<2> operator()(const ml::DSPVectorArray<2>& in) override;
 
 public:
 
 	Zap();
 
-	void copy(const Zap& rhs);
-	void reset() override;
 };

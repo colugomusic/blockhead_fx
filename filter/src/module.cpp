@@ -98,40 +98,6 @@ void rack_unit_set_sample_rate(void* handle, int sample_rate)
 	((FilterHandle*)(handle))->unit()->set_sample_rate(sample_rate);
 }
 
-char rack_unit_copy(void* dest, void* source)
-{
-	auto dest_handle = ((FilterHandle*)(dest));
-	auto source_handle = ((FilterHandle*)(source));
-
-	switch (dest_handle->type())
-	{
-		case FilterType::Filter_1Pole:
-		{
-			if (source_handle->type() != FilterType::Filter_1Pole) return 0;
-
-			((Filter_1Pole*)(dest_handle->unit()))->copy(*((Filter_1Pole*)(source_handle->unit())));
-			
-			return 1;
-		}
-
-		case FilterType::Filter_2Pole:
-		{
-			if (source_handle->type() != FilterType::Filter_2Pole) return 0;
-
-			((Filter_2Pole*)(dest_handle->unit()))->copy(*((Filter_2Pole*)(source_handle->unit())));
-
-			return 1;
-		}
-	}
-	
-	return 0;
-}
-
-void rack_unit_reset(void* handle)
-{
-	((FilterHandle*)(handle))->unit()->reset();
-}
-
 const char* rack_param_get_name(void* handle)
 {
 	return ((rack::Param*)(handle))->get_name().c_str();
@@ -180,16 +146,6 @@ const char* rack_param_get_switch_option_name(void* handle, int id)
 const char* rack_channel_get_name(void* handle)
 {
 	return ((rack::Channel*)(handle))->name.c_str();
-}
-
-void rack_channel_set_buffer_stride(void* handle, int stride)
-{
-	((rack::Channel*)(handle))->set_buffer_stride(stride);
-}
-
-int rack_channel_get_buffer_stride(void* handle)
-{
-	return ((rack::Channel*)(handle))->get_buffer_stride();
 }
 
 char rack_channel_set_input_buffer(void* handle, const float* in)

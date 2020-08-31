@@ -95,18 +95,6 @@ void rack_unit_set_sample_rate(void* handle, int sample_rate)
 	((Saturator*)(handle))->set_sample_rate(sample_rate);
 }
 
-char rack_unit_copy(void* dest, void* source)
-{
-	((Saturator*)(dest))->copy(*((Saturator*)(source)));
-
-	return 1;
-}
-
-void rack_unit_reset(void* handle)
-{
-	((Saturator*)(handle))->reset();
-}
-
 const char* rack_param_get_name(void* handle)
 {
 	return ((rack::Param*)(handle))->get_name().c_str();
@@ -155,16 +143,6 @@ const char* rack_param_get_switch_option_name(void* handle, int id)
 const char* rack_channel_get_name(void* handle)
 {
 	return ((rack::Channel*)(handle))->name.c_str();
-}
-
-void rack_channel_set_buffer_stride(void* handle, int stride)
-{
-	((rack::Channel*)(handle))->set_buffer_stride(stride);
-}
-
-int rack_channel_get_buffer_stride(void* handle)
-{
-	return ((rack::Channel*)(handle))->get_buffer_stride();
 }
 
 char rack_channel_set_input_buffer(void* handle, const float* in)
