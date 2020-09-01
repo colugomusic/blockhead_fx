@@ -48,9 +48,7 @@ ml::DSPVectorArray<2> Zap::operator()(const ml::DSPVectorArray<2>& in)
 
 	out = filter_(in);
 
-	ml::DSPVector mix(mix_);
-
-	return ml::lerp(in, out, ml::append(mix, mix));
+	return ml::lerp(in, out, mix_);
 }
 
 void Zap::on_freq_changed(float v)
