@@ -15,7 +15,7 @@ const char* rack_get_api_version()
 
 int rack_get_num_units()
 {
-	return 2;
+	return 3;
 }
 
 const char* rack_get_module_name()
@@ -39,6 +39,7 @@ void* rack_unit_make(int id)
 	{
 		case 0: return nullptr; // disabled // new FilterHandle(FilterType::Filter_1Pole);
 		case 1: return new FilterHandle(FilterType::Filter_2Pole);
+		case 2: return new FilterHandle(FilterType::Filter_2Pole_Peak);
 		default: return nullptr;
 	}
 }

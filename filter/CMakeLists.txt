@@ -18,12 +18,14 @@ endif()
 list(APPEND HEADERS
 	./src/1-pole.h
 	./src/2-pole.h
+	./src/2-pole_peak.h
 	./src/filter_handle.h
 	./src/filter_type.h
 )
 list(APPEND SRC
 	./src/1-pole.cpp
 	./src/2-pole.cpp
+	./src/2-pole_peak.cpp
 	./src/filter_handle.cpp
 	./src/module.cpp
 )
