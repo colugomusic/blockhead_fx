@@ -13,15 +13,13 @@ RingModulator::RingModulator()
 {
 	param_freq_ = add_smooth_param(1000.0f, "Frequency");
 
-	param_freq_->add_callback(std::bind(&audio::ringmod::RingModulator_Stereo::set_freq, &ringmod_, _1, true));
-
 	param_freq_->set_format_hint(Rack_ParamFormatHint_Hertz);
 	param_freq_->set_min(0.08f);
 	param_freq_->set_max(16700.0f);
 
 	param_amount_ = add_smooth_param(100.0f, "Amount");
 
-	param_amount_->add_callback([this](float v) { ringmod_.set_amount(v / 100.0f); });
+	param_amount_->set_transform([](const ml::DSPVector& v) { return v / 100.0f; });
 
 	param_amount_->set_size_hint(0.75f);
 	param_amount_->set_format_hint(Rack_ParamFormatHint_Percentage);
@@ -34,11 +32,6 @@ RingModulator::RingModulator()
 	param_amount_->begin_notify();
 }
 
-void RingModulator::on_sample_rate_changed(int new_SR)
-{
-	ringmod_.set_sr(sample_rate_);
-}
-
 void RingModulator::on_trigger_fired(const rack::Trigger* t)
 {
 	if (t == trigger_reset_)
@@ -49,5 +42,5 @@ void RingModulator::on_trigger_fired(const rack::Trigger* t)
 
 ml::DSPVectorArray<2> RingModulator::operator()(const ml::DSPVectorArray<2>& in)
 {
-	return ringmod_(in);
+	return ringmod_(in, sample_rate_, ml::repeat<2>((*param_freq_)()), ml::repeat<2>((*param_amount_)()));
 }

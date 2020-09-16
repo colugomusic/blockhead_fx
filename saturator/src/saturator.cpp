@@ -12,14 +12,14 @@ Saturator::Saturator()
 {
 	param_drive_ = add_smooth_param(0.0f, "Drive");
 
-	param_drive_->add_callback([this](float value) { saturator_.set_drive(value / 100.0f); });
+	param_drive_->set_transform([](const ml::DSPVector& v) { return v / 100.0f; });
 
 	param_drive_->set_max(100.0f);
 	param_drive_->set_format_hint(Rack_ParamFormatHint_Percentage);
 
 	param_gain_ = add_smooth_param(0.0f, "Gain");
 
-	param_gain_->add_callback([this](float value) { gain_af_ = snd::convert::dB2AF(value); });
+	param_gain_->set_transform([](const ml::DSPVector& v) { return snd::convert::dB2AF(v); });
 
 	param_gain_->set_format_hint(Rack_ParamFormatHint_Decibels);
 	param_gain_->set_min(-30.0f);
@@ -32,5 +32,5 @@ Saturator::Saturator()
 
 ml::DSPVectorArray<2> Saturator::operator()(const ml::DSPVectorArray<2>& in)
 {
-	return saturator_(in) * ml::DSPVectorArray<2>(gain_af_);
+	return saturator_(in, ml::repeat<2>((*param_drive_)())) * ml::repeat<2>((*param_gain_)());
 }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <snd/audio/filter/1-pole_stereo.h>
+#include <snd/audio/filter/1-pole.h>
 #include <rack++/module/basic_stereo_effect.h>
 
 class Filter_1Pole : public rack::BasicStereoEffect
@@ -10,10 +10,9 @@ class Filter_1Pole : public rack::BasicStereoEffect
 
 	enum class Mode { LP, HP } mode_ = Mode::LP;
 
-	snd::audio::filter::Filter_1Pole_Stereo filter_;
+	snd::audio::filter::Filter_1Pole<2> filter_;
 
 	void on_param_value_changed(const rack::Param* p, float new_value) override;
-	void on_sample_rate_changed(int new_SR) override;
 
 	ml::DSPVectorArray<2> operator()(const ml::DSPVectorArray<2>& in) override;
 

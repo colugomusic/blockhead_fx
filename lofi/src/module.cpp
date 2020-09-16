@@ -105,6 +105,11 @@ void rack_param_set_value(void* handle, float value)
 	((rack::Param*)(handle))->set(value);
 }
 
+void rack_param_set_value_buffer(void* handle, const float* buffer)
+{
+	((rack::Param*)(handle))->set(buffer);
+}
+
 float rack_param_get_value(void* handle)
 {
 	return ((rack::Param*)(handle))->get();

@@ -10,7 +10,6 @@ Filter_1Pole::Filter_1Pole()
 	: BasicStereoEffect("Filter (1P)")
 {
 	param_freq_ = add_smooth_param(1000.0f, "Frequency");
-	param_freq_->add_callback(std::bind(&snd::audio::filter::Filter_1Pole_Stereo::set_freq, filter_, _1, true));
 	param_freq_->set_min(0.08f);
 	param_freq_->set_max(16700.0f);
 	param_freq_->set_format_hint(Rack_ParamFormatHint_Hertz);
@@ -28,7 +27,7 @@ ml::DSPVectorArray<2> Filter_1Pole::operator()(const ml::DSPVectorArray<2>& in)
 {
 	ml::DSPVectorArray<2> out;
 
-	filter_(in);
+	filter_(in, sample_rate_, ml::repeat<2>((*param_freq_)()));
 
 	switch (mode_)
 	{
@@ -49,9 +48,4 @@ void Filter_1Pole::on_param_value_changed(const Param* p, float new_value)
 
 		return;
 	}
-}
-
-void Filter_1Pole::on_sample_rate_changed(int new_SR)
-{
-	filter_.set_sr(new_SR);
 }
