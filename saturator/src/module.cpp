@@ -50,9 +50,14 @@ const char* rack_unit_get_name(void* handle)
 	return ((Saturator*)(handle))->get_name().c_str();
 }
 
-void rack_unit_process(void* handle, int num_frames)
+void rack_unit_clear(void* handle)
 {
-	((Saturator*)(handle))->process(num_frames);
+	((Saturator*)(handle))->clear();
+}
+
+void rack_unit_process(void* handle)
+{
+	((Saturator*)(handle))->process();
 }
 
 int rack_unit_get_num_params(void* handle)

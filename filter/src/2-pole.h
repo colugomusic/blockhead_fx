@@ -22,7 +22,9 @@ class Filter_2Pole : public rack::BasicStereoEffect
 
 	ml::DSPVectorArray<2> operator()(const ml::DSPVectorArray<2>& in) override;
 
+	void effect_clear() override {}
 public:
 
 	Filter_2Pole();
+
 };

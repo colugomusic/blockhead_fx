@@ -54,9 +54,14 @@ const char* rack_unit_get_name(void* handle)
 	return ((FilterHandle*)(handle))->unit()->get_name().c_str();
 }
 
-void rack_unit_process(void* handle, int num_frames)
+void rack_unit_clear(void* handle)
 {
-	((FilterHandle*)(handle))->unit()->process(num_frames);
+	((FilterHandle*)(handle))->unit()->clear();
+}
+
+void rack_unit_process(void* handle)
+{
+	((FilterHandle*)(handle))->unit()->process();
 }
 
 int rack_unit_get_num_params(void* handle)

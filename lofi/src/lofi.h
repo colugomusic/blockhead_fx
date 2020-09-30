@@ -11,7 +11,6 @@ class Lofi : public rack::BasicStereoEffect
 	rack::SmoothParam* param_sr_ = nullptr;
 	rack::SmoothParam* param_bitrate_ = nullptr;
 
-	ml::DSPVector inc_;
 	float phase_ = 0.0f;
 	float out_[2] = { 0.0f, 0.0f };
 
@@ -21,7 +20,9 @@ class Lofi : public rack::BasicStereoEffect
 
 	static ml::DSPVector calculate_inc(int SR, const ml::DSPVector& rate);
 
+	void effect_clear() override {}
 public:
 
 	Lofi();
+
 };

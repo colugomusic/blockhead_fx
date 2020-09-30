@@ -50,11 +50,16 @@ const char* rack_unit_get_name(void* handle)
 	return ((Zap*)(handle))->get_name().c_str();
 }
 
-void rack_unit_process(void* handle, int num_frames)
+void rack_unit_clear(void* handle)
+{
+	((Zap*)(handle))->clear();
+}
+
+void rack_unit_process(void* handle)
 {
 	ml::DSPVectorArray<2> in;
 
-	((Zap*)(handle))->process(num_frames);
+	((Zap*)(handle))->process();
 }
 
 int rack_unit_get_num_params(void* handle)

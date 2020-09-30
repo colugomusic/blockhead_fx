@@ -4,7 +4,7 @@
 #include <rack++/module/param.h>
 #include <rack++/module/trigger.h>
 #include <rack++/module/unit.h>
-#include "lofi.h"
+#include "reverb.h"
 
 const char* rack_get_api_version()
 {
@@ -18,7 +18,7 @@ int rack_get_num_units()
 
 const char* rack_get_module_name()
 {
-	return "Lo-fi";
+	return "Reverb";
 }
 
 const char* rack_get_module_version()
@@ -35,7 +35,7 @@ void* rack_unit_make(int id)
 {
 	switch (id)
 	{
-		case 0: return new Lofi();
+		case 0: return new Reverb();
 		default: return nullptr;
 	}
 }
@@ -47,57 +47,57 @@ void rack_unit_free(void* handle)
 
 const char* rack_unit_get_name(void* handle)
 {
-	return ((Lofi*)(handle))->get_name().c_str();
+	return ((Reverb*)(handle))->get_name().c_str();
 }
 
 void rack_unit_clear(void* handle)
 {
-	((Lofi*)(handle))->clear();
+	((Reverb*)(handle))->clear();
 }
 
 void rack_unit_process(void* handle)
 {
-	((Lofi*)(handle))->process();
+	((Reverb*)(handle))->process();
 }
 
 int rack_unit_get_num_params(void* handle)
 {
-	return ((const Lofi*)(handle))->get_num_params();
+	return ((const Reverb*)(handle))->get_num_params();
 }
 
 int rack_unit_get_num_input_channels(void* handle)
 {
-	return ((const Lofi*)(handle))->get_num_input_channels();
+	return ((const Reverb*)(handle))->get_num_input_channels();
 }
 
 int rack_unit_get_num_output_channels(void* handle)
 {
-	return ((const Lofi*)(handle))->get_num_output_channels();
+	return ((const Reverb*)(handle))->get_num_output_channels();
 }
 
 void* rack_unit_get_input_channel(void* handle, int id)
 {
-	return ((const Lofi*)(handle))->get_input_channel(id);
+	return ((const Reverb*)(handle))->get_input_channel(id);
 }
 
 void* rack_unit_get_output_channel(void* handle, int id)
 {
-	return ((const Lofi*)(handle))->get_output_channel(id);
+	return ((const Reverb*)(handle))->get_output_channel(id);
 }
 
 void* rack_unit_get_param(void* handle, int id)
 {
-	return ((const Lofi*)(handle))->get_param(id);
+	return ((const Reverb*)(handle))->get_param(id);
 }
 
 int rack_unit_get_sample_rate(void* handle)
 {
-	return ((const Lofi*)(handle))->get_sample_rate();
+	return ((const Reverb*)(handle))->get_sample_rate();
 }
 
 void rack_unit_set_sample_rate(void* handle, int sample_rate)
 {
-	((Lofi*)(handle))->set_sample_rate(sample_rate);
+	((Reverb*)(handle))->set_sample_rate(sample_rate);
 }
 
 const char* rack_param_get_name(void* handle)

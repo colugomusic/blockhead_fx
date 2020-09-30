@@ -65,5 +65,5 @@ ml::DSPVectorArray<2> Zap::operator()(const ml::DSPVectorArray<2>& in)
 
  	out = filter_(in, sample_rate_, freq, ml::repeat<2>(res));
 
-	return ml::lerp(in, out, mix);
+	return ml::lerp(in, out, ml::repeat<2>(mix));
 }

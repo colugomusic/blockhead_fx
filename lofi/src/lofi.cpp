@@ -17,9 +17,7 @@ Lofi::Lofi()
 	{
 		auto rate = v / 100.0f;
 
-		inc_ = calculate_inc(sample_rate_, rate);
-
-		return rate;
+		return calculate_inc(sample_rate_, rate);
 	});
 
 	param_sr_->set_format_hint(Rack_ParamFormatHint_Percentage);
@@ -71,9 +69,11 @@ ml::DSPVectorArray<2> Lofi::operator()(const ml::DSPVectorArray<2>& in)
 {
 	ml::DSPVectorArray<2> out;
 
+	auto inc = (*param_sr_)();
+	
 	for (int i = 0; i < kFloatsPerDSPVector; i++)
 	{
-		auto ph = phase_ + inc_[i];
+		auto ph = phase_ + inc[i];
 		auto r = int(std::round(ph));
 
 		phase_ = ph - r;
