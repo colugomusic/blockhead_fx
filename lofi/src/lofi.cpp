@@ -15,7 +15,7 @@ Lofi::Lofi()
 
 	param_sr_->set_transform([this](const ml::DSPVector& v)
 	{
-		auto rate = v / 100.0f;
+		auto rate = ml::lerp(ml::DSPVector(0.1f), ml::DSPVector(1.0f), v / 100.0f);
 
 		return calculate_inc(sample_rate_, rate);
 	});
@@ -28,7 +28,7 @@ Lofi::Lofi()
 
 	param_bitrate_->set_transform([](const ml::DSPVector& v)
 	{
-		return ml::pow(ml::DSPVector(0.5f), ml::pow(ml::DSPVector(1.0f) - (v / 100.0f), ml::DSPVector(2.0f)) * 16.0f);
+		return ml::pow(ml::DSPVector(0.5f), ml::pow(ml::DSPVector(1.0f) - (v / 100.0f), ml::DSPVector(2.0f)) * 8.0f) * 0.9f;
 	});
 
 	param_bitrate_->set_size_hint(0.75f);
@@ -38,6 +38,9 @@ Lofi::Lofi()
 
 	param_sr_->begin_notify();
 	param_bitrate_->begin_notify();
+
+	dc_blocker_[0].mCoeffs = ml::DCBlocker::coeffs(0.05f);
+	dc_blocker_[1].mCoeffs = ml::DCBlocker::coeffs(0.05f);
 }
 
 static ml::DSPVector tan(const ml::DSPVector& x)
@@ -89,6 +92,9 @@ ml::DSPVectorArray<2> Lofi::operator()(const ml::DSPVectorArray<2>& in)
 	}
 
 	auto step = ml::repeat<2>((*param_bitrate_)());
+	auto crushed = ml::intToFloat(ml::truncateFloatToInt((out / step) + 0.5f)) * step;
+	auto L = dc_blocker_[0](crushed.constRow(0));
+	auto R = dc_blocker_[1](crushed.constRow(0));
 
-	return ml::intToFloat(ml::truncateFloatToInt((out / step) + 0.5f)) * step;
+	return ml::append(L, R);
 }

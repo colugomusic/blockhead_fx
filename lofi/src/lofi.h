@@ -3,6 +3,7 @@
 #include <rack++/module/basic_stereo_effect.h>
 
 #pragma warning(push, 0)
+#include <DSP/MLDSPFilters.h>
 #include <DSP/MLDSPOps.h>
 #pragma warning(pop)
 
@@ -13,6 +14,7 @@ class Lofi : public rack::BasicStereoEffect
 
 	float phase_ = 0.0f;
 	float out_[2] = { 0.0f, 0.0f };
+	ml::DCBlocker dc_blocker_[2];
 
 	void on_sample_rate_changed(int new_SR) override;
 
