@@ -16,8 +16,6 @@ class Lofi : public rack::BasicStereoEffect
 	float out_[2] = { 0.0f, 0.0f };
 	ml::DCBlocker dc_blocker_[2];
 
-	void on_sample_rate_changed(int new_SR) override;
-
 	ml::DSPVectorArray<2> operator()(const ml::DSPVectorArray<2>& in) override;
 
 	static ml::DSPVector calculate_inc(int SR, const ml::DSPVector& rate);

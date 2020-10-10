@@ -63,11 +63,6 @@ ml::DSPVector Lofi::calculate_inc(int SR, const ml::DSPVector& rate)
 	return (1.0f / float(SR)) * freq;
 }
 
-void Lofi::on_sample_rate_changed(int new_SR)
-{
-	param_sr_->set_cache_dirty();
-}
-
 ml::DSPVectorArray<2> Lofi::operator()(const ml::DSPVectorArray<2>& in)
 {
 	ml::DSPVectorArray<2> out;
