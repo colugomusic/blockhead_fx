@@ -94,7 +94,7 @@ ml::DSPVectorArray<2> Lofi::operator()(const ml::DSPVectorArray<2>& in)
 	auto step = ml::repeat<2>((*param_bitrate_)());
 	auto crushed = ml::intToFloat(ml::truncateFloatToInt((out / step) + 0.5f)) * step;
 	auto L = dc_blocker_[0](crushed.constRow(0));
-	auto R = dc_blocker_[1](crushed.constRow(0));
+	auto R = dc_blocker_[1](crushed.constRow(1));
 
 	return ml::append(L, R);
 }
