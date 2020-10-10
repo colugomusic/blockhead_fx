@@ -17,7 +17,8 @@ class Zap : public rack::BasicStereoEffect
 
 	ml::DSPVectorArray<2> operator()(const ml::DSPVectorArray<2>& in) override;
 
-	void effect_clear() override {}
+	void effect_clear() override;
+
 public:
 
 	Zap();

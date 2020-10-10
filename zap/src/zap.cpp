@@ -14,7 +14,7 @@ Zap::Zap()
 	{
 		const auto x = v / 100.0f;
 		
-		return x * x;
+		return x * x * ml::signBit(x);
 	});
 
 	param_spread_->set_size_hint(0.75);
@@ -56,14 +56,22 @@ ml::DSPVectorArray<2> Zap::operator()(const ml::DSPVectorArray<2>& in)
 	const auto& res = (*param_res_)();
 	const auto& mix = (*param_mix_)();
 
-	const auto offset = spread * (ml::signBit(spread) * 1000.0f);
+	const auto offset = spread * 1000.0f;
 
-	const auto freq_L = base_freq - offset;
-	const auto freq_R = base_freq + offset;
+	const ml::DSPVector min_freq(MIN_FREQ);
+	const ml::DSPVector max_freq(MAX_FREQ);
+
+	const auto freq_L = ml::clamp(base_freq - offset, min_freq, max_freq);
+	const auto freq_R = ml::clamp(base_freq + offset, min_freq, max_freq);
 
 	const auto freq = ml::append(freq_L, freq_R);
 
  	out = filter_(in, sample_rate_, freq, ml::repeat<2>(res));
 
 	return ml::lerp(in, out, ml::repeat<2>(mix));
+}
+
+void Zap::effect_clear()
+{
+	filter_.clear();
 }
