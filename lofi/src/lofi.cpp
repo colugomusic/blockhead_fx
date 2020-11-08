@@ -2,6 +2,7 @@
 #include <rack++/module/channel.h>
 #include <rack++/module/smooth_param.h>
 #include <rack++/module/trigger.h>
+#include <snd/misc.h>
 #include "lofi.h"
 
 using namespace snd;
@@ -15,9 +16,7 @@ Lofi::Lofi()
 
 	param_sr_->set_transform([this](const ml::DSPVector& v)
 	{
-		auto rate = ml::lerp(ml::DSPVector(0.1f), ml::DSPVector(1.0f), v / 100.0f);
-
-		return calculate_inc(sample_rate_, rate);
+		return v / 100.0f;
 	});
 
 	param_sr_->set_format_hint(Rack_ParamFormatHint_Percentage);
@@ -28,7 +27,16 @@ Lofi::Lofi()
 
 	param_bitrate_->set_transform([](const ml::DSPVector& v)
 	{
-		return ml::pow(ml::DSPVector(0.5f), ml::pow(ml::DSPVector(1.0f) - (v / 100.0f), ml::DSPVector(2.0f)) * 8.0f) * 0.9f;
+		ml::DSPVector out;
+
+		for (int i = 0; i < kFloatsPerDSPVector; i++)
+		{
+			const auto x = (v[i] / 100.0f);
+
+			out[i] = x * std::pow(0.1f, std::pow(1.0f - x, 2.0f)) * 0.9f;
+		}
+
+		return out;
 	});
 
 	param_bitrate_->set_size_hint(0.75f);
@@ -38,9 +46,6 @@ Lofi::Lofi()
 
 	param_sr_->begin_notify();
 	param_bitrate_->begin_notify();
-
-	dc_blocker_[0].mCoeffs = ml::DCBlocker::coeffs(0.05f);
-	dc_blocker_[1].mCoeffs = ml::DCBlocker::coeffs(0.05f);
 }
 
 static ml::DSPVector tan(const ml::DSPVector& x)
@@ -67,7 +72,9 @@ ml::DSPVectorArray<2> Lofi::operator()(const ml::DSPVectorArray<2>& in)
 {
 	ml::DSPVectorArray<2> out;
 
-	auto inc = (*param_sr_)();
+	const auto raw_rate = (*param_sr_)();
+	const auto rate = ml::lerp(ml::DSPVector(0.1f), ml::DSPVector(1.0f), raw_rate);
+	const auto inc = calculate_inc(sample_rate_, rate);
 	
 	for (int i = 0; i < kFloatsPerDSPVector; i++)
 	{
@@ -87,9 +94,6 @@ ml::DSPVectorArray<2> Lofi::operator()(const ml::DSPVectorArray<2>& in)
 	}
 
 	auto step = ml::repeat<2>((*param_bitrate_)());
-	auto crushed = ml::intToFloat(ml::truncateFloatToInt((out / step) + 0.5f)) * step;
-	auto L = dc_blocker_[0](crushed.constRow(0));
-	auto R = dc_blocker_[1](crushed.constRow(1));
 
-	return ml::append(L, R);
+	return ml::select(ml::intToFloat(ml::truncateFloatToInt((out / step) + 0.5f)) * step, out, ml::greaterThan(step, ml::DSPVectorArray<2>(0.0f)));
 }

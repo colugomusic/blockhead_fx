@@ -14,7 +14,6 @@ class Lofi : public rack::BasicStereoEffect
 
 	float phase_ = 0.0f;
 	float out_[2] = { 0.0f, 0.0f };
-	ml::DCBlocker dc_blocker_[2];
 
 	ml::DSPVectorArray<2> operator()(const ml::DSPVectorArray<2>& in) override;
 
