@@ -32,8 +32,8 @@ Saturator::Saturator()
 
 ml::DSPVectorArray<2> Saturator::operator()(const ml::DSPVectorArray<2>& in)
 {
-	auto drive = ml::repeat<2>((*param_drive_)());
-	auto gain = ml::repeat<2>((*param_gain_)());
+	auto drive = ml::repeatRows<2>((*param_drive_)());
+	auto gain = ml::repeatRows<2>((*param_gain_)());
 
 	return saturator_(in, drive) * gain;
 }

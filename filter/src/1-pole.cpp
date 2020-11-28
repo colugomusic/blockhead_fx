@@ -27,7 +27,7 @@ ml::DSPVectorArray<2> Filter_1Pole::operator()(const ml::DSPVectorArray<2>& in)
 {
 	ml::DSPVectorArray<2> out;
 
-	filter_(in, sample_rate_, ml::repeat<2>((*param_freq_)()));
+	filter_(in, sample_rate_, ml::repeatRows<2>((*param_freq_)()));
 
 	switch (mode_)
 	{

@@ -32,7 +32,7 @@ ml::DSPVectorArray<2> Filter_2Pole_Peak::operator()(const ml::DSPVectorArray<2>&
 {
 	ml::DSPVectorArray<2> out;
 
-	filter_(in, sample_rate_, ml::repeat<2>((*param_freq_)()), ml::repeat<2>((*param_res_)()));
+	filter_(in, sample_rate_, ml::repeatRows<2>((*param_freq_)()), ml::repeatRows<2>((*param_res_)()));
 
 	return filter_.peak();
 }

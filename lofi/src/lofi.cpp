@@ -93,7 +93,7 @@ ml::DSPVectorArray<2> Lofi::operator()(const ml::DSPVectorArray<2>& in)
 		out.row(1)[i] = out_[1];
 	}
 
-	auto step = ml::repeat<2>((*param_bitrate_)());
+	auto step = ml::repeatRows<2>((*param_bitrate_)());
 
 	return ml::select(ml::intToFloat(ml::truncateFloatToInt((out / step) + 0.5f)) * step, out, ml::greaterThan(step, ml::DSPVectorArray<2>(0.0f)));
 }

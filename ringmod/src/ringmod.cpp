@@ -42,5 +42,5 @@ void RingModulator::on_trigger_fired(const rack::Trigger* t)
 
 ml::DSPVectorArray<2> RingModulator::operator()(const ml::DSPVectorArray<2>& in)
 {
-	return ringmod_(in, sample_rate_, ml::repeat<2>((*param_freq_)()), ml::repeat<2>((*param_amount_)()));
+	return ringmod_(in, sample_rate_, ml::repeatRows<2>((*param_freq_)()), ml::repeatRows<2>((*param_amount_)()));
 }

@@ -64,11 +64,11 @@ ml::DSPVectorArray<2> Zap::operator()(const ml::DSPVectorArray<2>& in)
 	const auto freq_L = ml::clamp(base_freq - offset, min_freq, max_freq);
 	const auto freq_R = ml::clamp(base_freq + offset, min_freq, max_freq);
 
-	const auto freq = ml::append(freq_L, freq_R);
+	const auto freq = ml::concatRows(freq_L, freq_R);
 
- 	out = filter_(in, sample_rate_, freq, ml::repeat<2>(res));
+ 	out = filter_(in, sample_rate_, freq, ml::repeatRows<2>(res));
 
-	return ml::lerp(in, out, ml::repeat<2>(mix));
+	return ml::lerp(in, out, ml::repeatRows<2>(mix));
 }
 
 void Zap::effect_clear()

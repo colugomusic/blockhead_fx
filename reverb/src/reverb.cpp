@@ -150,5 +150,5 @@ ml::DSPVectorArray<2> Reverb::operator()(const ml::DSPVectorArray<2>& in)
 	mvFeedbackL = mAp10(vTapR, vt10) * vSmoothFeedback;
 
 	// append the left and right taps and return the stereo output
-	return ml::lerp(in, append(vTapL, vTapR), ml::repeat<2>((*param_mix_)()));
+	return ml::lerp(in, ml::concatRows(vTapL, vTapR), ml::repeatRows<2>((*param_mix_)()));
 }
