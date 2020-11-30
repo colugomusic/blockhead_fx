@@ -2,7 +2,7 @@
 #include <rack++/module/channel.h>
 #include <rack++/module/smooth_param.h>
 #include <rack++/module/trigger.h>
-#include "Reverb.h"
+#include "reverb.h"
 
 #pragma warning(push, 0)
 #include <DSP/MLDSPProjections.h>

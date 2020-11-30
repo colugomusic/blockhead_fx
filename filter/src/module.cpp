@@ -46,7 +46,7 @@ void* rack_unit_make(int id)
 
 void rack_unit_free(void* handle)
 {
-	delete handle;
+	delete ((FilterHandle*)(handle));
 }
 
 const char* rack_unit_get_name(void* handle)

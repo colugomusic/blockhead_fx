@@ -42,7 +42,7 @@ void* rack_unit_make(int id)
 
 void rack_unit_free(void* handle)
 {
-	delete handle;
+	delete ((Zap*)(handle));
 }
 
 const char* rack_unit_get_name(void* handle)
